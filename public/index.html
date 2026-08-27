@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#DC4A1E">
+<title>MI CUENTA ISPI — Estado de cuenta</title>
+<link rel="icon" type="image/png" href="logo-ispi.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--font-d:'Baloo 2',cursive;--font-b:'Nunito',sans-serif}
+  .app{--bg:#EEEFF5;--card:#FFF;--line:#E3E5EF;--line-soft:#EFF0F7;--hover:#F7F8FD;--txt:#23263A;--mut:#8B90A0;
+    --red:#DC4A1E;--red-d:#B93A12;--red-soft:#FBEDE7;--indigo:#2E3192;--indigo-bg:#2E3192;--indigo-bg2:#3D4BB5;--lav:#B9C0F0;
+    --blue:#4FA8DC;--blue-soft:#EAF5FC;--green:#8CC63E;--green-soft:#F1F8E6;--orange:#F0703C;--orange-soft:#FDEEE6;
+    --bar-bg:#F4F5FA;--track:#D5D7E4;--err-txt:#B4441C;--shadow:0 10px 26px -18px rgba(35,38,58,.35)}
+  .app[data-theme="dark"]{--bg:#121322;--card:#1B1D30;--line:#2D3049;--line-soft:#262A40;--hover:#232640;--txt:#EDEFFA;--mut:#9AA0BA;
+    --red:#F06031;--red-d:#D14E20;--red-soft:rgba(240,96,49,.16);--indigo:#A9B2F5;--indigo-bg:#232677;--indigo-bg2:#2E3192;--lav:#8A90CE;
+    --blue:#63B7E8;--blue-soft:rgba(99,183,232,.14);--green:#9ED455;--green-soft:rgba(158,212,85,.15);--orange:#F5854F;--orange-soft:rgba(245,133,79,.16);
+    --bar-bg:#20233A;--track:#3A3E5C;--err-txt:#FFB093;--shadow:0 12px 28px -18px rgba(0,0,0,.65)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:var(--font-b);color:#23263A;min-height:100dvh;background:
+    radial-gradient(55% 40% at 85% 5%,rgba(224,82,31,.16),transparent 60%),
+    radial-gradient(45% 40% at 10% 95%,rgba(46,49,146,.2),transparent 65%),
+    radial-gradient(30% 25% at 15% 10%,rgba(79,168,220,.12),transparent 60%),#191A2E}
+  button{font-family:inherit;border:none;background:none;cursor:pointer;touch-action:manipulation;color:inherit}
+  button:focus-visible,input:focus-visible{outline:3px solid rgba(220,74,30,.4);outline-offset:2px}
+  .hidden{display:none!important}
+  .app,.card,.list-card,.receipt,.chip,.dni-input,.estado-bar,.bottom-nav,.perfil-card,.demo-box,.sheet,.qa,.btn-outline,.th-ic,.logo{transition:background-color .3s,border-color .3s,color .3s}
+  .stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:100dvh;padding:26px 14px}
+  .stage-cap{color:rgba(238,239,244,.6);font-size:13px;text-align:center}
+  .stage-cap b{color:#FF8A5C}
+  .phone{width:412px;max-width:100%;border-radius:48px;padding:11px;background:#0B0C14;border:1px solid rgba(255,255,255,.09);box-shadow:0 50px 100px -30px rgba(0,0,0,.7),inset 0 2px 3px rgba(255,255,255,.07)}
+  .app{position:relative;height:min(844px,calc(100dvh - 110px));min-height:560px;border-radius:38px;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--txt)}
+  .app-main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+  .app-main::-webkit-scrollbar{display:none}
+  .screen{display:none}
+  .screen.active{display:block;animation:scrIn .35s cubic-bezier(.22,.8,.3,1)}
+  @keyframes scrIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;transform:translateY(14px)}
+  .reveal.in{opacity:1;transform:none;transition:opacity .5s ease var(--d,0s),transform .55s cubic-bezier(.2,.8,.3,1) var(--d,0s)}
+  img.logo-asset{display:block;aspect-ratio:200/172;height:auto;object-fit:contain}
+  .logo-main{width:158px;margin:0 auto}
+  .r-logo{width:88px;margin:0 auto 10px}
+  .pf-logo{width:56px;background:#fff;border-radius:10px;padding:3px;margin-left:auto}
+  .logo{display:inline-block;background:#fff;border-radius:16px;padding:6px 10px;margin:-78px auto 10px;box-shadow:0 12px 26px rgba(0,0,0,.28);animation:logoIn .7s cubic-bezier(.3,1.4,.4,1)}
+  @keyframes logoIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+  .hero{position:relative;text-align:center}
+  .dome{height:188px;background:linear-gradient(180deg,#E0521F,#C64312);border-radius:0 0 50% 50%/0 0 88px 88px}
+  .sbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:15px 26px 0;color:#fff;font-weight:700;font-size:14px}
+  .sbar .s-ic{display:flex;gap:6px;align-items:center}
+  .notch{position:absolute;left:50%;top:9px;transform:translateX(-50%);width:118px;height:26px;background:#0B0C14;border-radius:14px}
+  .app-title{font-family:var(--font-d);font-weight:800;font-size:1.8rem;color:var(--indigo);line-height:1.1;transition:color .3s}
+  .app-sub{color:var(--mut);font-size:14px;margin-top:2px;font-weight:600}
+  .card{background:var(--card);border-radius:18px;padding:16px;margin:14px 16px 0;box-shadow:var(--shadow)}
+  .card-head{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+  .card-head b{font-size:15px;font-weight:800}
+  .card-head small{display:block;color:var(--mut);font-size:12px;font-weight:600}
+  .card-head.row{justify-content:space-between;align-items:center;margin-bottom:4px}
+  .icn{width:42px;height:42px;flex:none;border-radius:50%;border:1.7px solid var(--indigo);color:var(--indigo);display:grid;place-items:center}
+  .link{color:var(--blue);font-size:12.5px;font-weight:800}
+  .dni-card{border:1.7px solid var(--red)}
+  .dni-card.shake{animation:shake .5s}
+  @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(3px)}30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
+  .dni-input{display:flex;align-items:center;gap:10px;border:1.7px solid var(--red);border-radius:12px;padding:13px 14px;background:var(--card)}
+  .dni-input:focus-within{box-shadow:0 0 0 4px rgba(220,74,30,.14)}
+  .dni-input svg{color:var(--red);flex:none}
+  .dni-input input{border:none;outline:none;flex:1;font:700 15px var(--font-b);color:var(--txt);letter-spacing:.02em;background:transparent;min-width:0}
+  .dni-input input::placeholder{color:var(--mut);font-weight:600}
+  .btn-red{width:100%;margin-top:12px;background:var(--red);color:#fff;border-radius:12px;padding:14px;font:800 16px var(--font-b);letter-spacing:.02em;box-shadow:0 12px 22px -12px rgba(220,74,30,.75);display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s,background .2s,opacity .2s}
+  .btn-red:active{transform:scale(.98);background:var(--red-d)}
+  .btn-red:disabled{opacity:.55;cursor:not-allowed}
+  .btn-red .spinner{width:17px;height:17px;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .privacy{color:var(--mut);font-size:12px;font-weight:600;text-align:center;margin-top:12px}
+  .acc-error{margin-top:12px;padding:11px 13px;border-radius:12px;background:var(--orange-soft);color:var(--err-txt);font-size:13px;font-weight:700;display:flex;gap:8px;line-height:1.45}
+  .demo-box{margin:14px 16px 0;padding:13px 14px;border:1.7px dashed rgba(127,127,180,.4);border-radius:14px;background:var(--card);font-size:12.5px;color:var(--mut);font-weight:600;line-height:1.55}
+  .demo-box strong{color:var(--indigo)}
+  .demo-box code{background:var(--bg);padding:1px 6px;border-radius:6px;font-size:11.5px;color:var(--txt)}
+  .demo-box .chips-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+  .chip-dni{background:var(--card);border:1.6px solid var(--red);color:var(--red);border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800;transition:.2s}
+  .chip-dni:active{transform:scale(.94);background:var(--red-soft)}
+  .info-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:13px 14px}
+  .info-item small{display:block;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:3px}
+  .info-item b{font-size:14px;font-weight:800;line-height:1.3}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .stat{border:1.7px solid;border-radius:14px;padding:13px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;transition:transform .2s,background-color .3s,border-color .3s,color .3s}
+  .stat small{font-size:10.5px;font-weight:800;line-height:1.2}
+  .stat b{font:800 21px var(--font-d)}
+  .stat.blue{border-color:var(--blue);color:var(--blue);background:var(--blue-soft)}
+  .stat.green{border-color:var(--green);color:#679A2B;background:var(--green-soft)}
+  .app[data-theme="dark"] .stat.green{color:var(--green)}
+  .stat.red{border-color:var(--red);color:var(--red);background:var(--red-soft)}
+  .estado-bar{margin-top:12px;background:var(--bar-bg);border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px;font-weight:700;color:var(--mut)}
+  .estado-bar .sep{width:1.5px;height:22px;background:var(--line)}
+  .eb-val{display:inline-flex;align-items:center;gap:6px;color:var(--txt)}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;padding:4px 12px;border-radius:999px}
+  .pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+  .pill.green{background:var(--green-soft);color:#679A2B}
+  .app[data-theme="dark"] .pill.green{color:var(--green)}
+  .pill.orange{background:var(--orange-soft);color:var(--orange)}
+  .pill.red{background:var(--orange-soft);color:var(--red)}
+  .pill.green::before{animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(140,198,62,.45)}70%{box-shadow:0 0 0 6px rgba(140,198,62,0)}100%{box-shadow:0 0 0 0 rgba(140,198,62,0)}}
+  .crow{width:100%;display:flex;align-items:center;gap:12px;text-align:left;padding:13px 2px;border-top:1.5px solid var(--line-soft)}
+  .crow:first-child{border-top:none}
+  .crow:active{background:var(--hover)}
+  .c-ic{width:37px;height:37px;flex:none;border-radius:50%;display:grid;place-items:center}
+  .c-ic.paga{background:var(--green-soft);color:#679A2B}
+  .app[data-theme="dark"] .c-ic.paga{color:var(--green)}
+  .c-ic.pendiente{background:var(--orange-soft);color:var(--orange)}
+  .c-ic.vencida{background:var(--orange-soft);color:var(--red)}
+  .c-mid{flex:1;min-width:0}
+  .c-mid b{display:block;font-size:14px;font-weight:800}
+  .c-mid small{display:block;font-size:12px;font-weight:600;color:var(--mut);margin-top:1px}
+  .c-right{flex:none;text-align:right}
+  .c-right .st{display:block;font-size:12.5px;font-weight:800}
+  .st.paga{color:var(--blue)}.st.pendiente{color:var(--orange)}.st.vencida{color:var(--red)}
+  .c-right .dt{display:block;font-size:11px;font-weight:700;color:var(--mut);margin-top:2px;font-variant-numeric:tabular-nums}
+  .c-chev{flex:none;color:var(--mut)}
+  .quick h3{font-size:15px;font-weight:800;margin:20px 20px 10px}
+  .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 16px}
+  .qa{border:1.7px solid;border-radius:12px;padding:13px 4px;background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;font-size:10.5px;font-weight:800;line-height:1.25;text-align:center}
+  .qa:active{transform:scale(.95);background:var(--hover)}
+  .qa.c-indigo{border-color:var(--indigo);color:var(--indigo)}
+  .qa.c-green{border-color:var(--green);color:#679A2B}
+  .qa.c-blue{border-color:var(--blue);color:var(--blue)}
+  .qa.c-red{border-color:var(--red);color:var(--red)}
+  .app[data-theme="dark"] .qa.c-green{color:var(--green)}
+  @media (max-width:360px){.quick-grid{grid-template-columns:repeat(2,1fr)}}
+  .theme-row{display:flex;align-items:center;gap:12px}
+  .th-ic{width:42px;height:42px;flex:none;border-radius:12px;background:var(--bar-bg);color:var(--indigo);display:grid;place-items:center}
+  .th-txt{flex:1}
+  .th-txt b{font-size:14px;font-weight:800;display:block}
+  .th-txt small{color:var(--mut);font-size:12px;font-weight:600}
+  .switch{position:relative;width:52px;height:30px;flex:none}
+  .switch input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+  .slider{position:absolute;inset:0;background:var(--track);border-radius:999px;transition:background .3s;pointer-events:none}
+  .slider::before{content:'';position:absolute;width:24px;height:24px;border-radius:50%;background:#fff;top:3px;left:3px;box-shadow:0 2px 6px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.3,1.4,.5,1)}
+  .switch input:checked + .slider{background:var(--indigo-bg)}
+  .switch input:checked + .slider::before{transform:translateX(22px)}
+  .btn-outline{width:calc(100% - 32px);margin:18px 16px 26px;padding:13px;border-radius:12px;border:1.8px solid var(--red);color:var(--red);font:800 15px var(--font-b);background:transparent;transition:.2s}
+  .btn-outline:active{transform:scale(.98);background:var(--red-soft)}
+  .session-card .btn-outline{width:100%;margin:16px 0 0}
+  .page-head{padding:24px 20px 4px}
+  .page-head h2{font:800 1.45rem var(--font-d);color:var(--indigo)}
+  .page-head small{color:var(--mut);font-size:12.5px;font-weight:700}
+  .saldo-card{margin:14px 16px 0;border-radius:16px;padding:16px 18px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(135deg,var(--indigo-bg),var(--indigo-bg2));box-shadow:var(--shadow)}
+  .saldo-card small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--lav)}
+  .saldo-card b{font:800 1.5rem var(--font-d);font-variant-numeric:tabular-nums}
+  .saldo-card .pill{background:rgba(255,255,255,.16);color:#fff}
+  .chips{display:flex;gap:8px;padding:14px 16px;overflow-x:auto}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;padding:8px 15px;border-radius:999px;background:var(--card);border:1.6px solid var(--line);font-size:12.5px;font-weight:800;color:var(--mut)}
+  .chip:active{transform:scale(.94)}
+  .chip.on{background:var(--indigo-bg);border-color:var(--indigo-bg);color:#fff}
+  .chip .n{opacity:.75;font-size:11px;margin-left:3px}
+  .list-card{margin:0 16px 20px;background:var(--card);border-radius:16px;padding:4px 14px;box-shadow:var(--shadow)}
+  .empty-state{padding:36px 20px;text-align:center;color:var(--mut);font-size:14px;font-weight:700}
+  .empty-state span{font-size:2rem;display:block;margin-bottom:8px}
+  .perfil-card{margin:16px 16px 0;border-radius:20px;overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
+  .pf-top{display:flex;gap:14px;align-items:center;padding:18px;background:linear-gradient(135deg,var(--indigo-bg),var(--indigo-bg2));color:#fff}
+  .avatar{width:58px;height:58px;flex:none;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font:800 1.2rem var(--font-d);border:3px solid rgba(255,255,255,.4)}
+  .pf-top b{font-size:1.05rem;font-weight:800;display:block}
+  .pf-top small{display:block;font-size:12px;color:var(--lav);margin-top:2px;font-weight:700}
+  .pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 16px;padding:16px 18px}
+  .pf-grid small{display:block;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:2px}
+  .pf-grid b{font-size:13.5px;font-weight:800}
+  .bottom-nav{flex:none;background:var(--indigo-bg);display:flex;padding:9px 6px calc(9px + env(safe-area-inset-bottom));position:relative}
+  .bottom-nav::after{content:'';position:absolute;left:50%;bottom:4px;transform:translateX(-50%);width:120px;height:4px;border-radius:99px;background:rgba(255,255,255,.85)}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--lav);font-size:10px;font-weight:800;padding:4px 0 6px;transition:color .2s}
+  .nav-item svg{transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+  .nav-item.on{color:#fff}
+  .nav-item.on svg{transform:translateY(-2px) scale(1.1)}
+  .overlay{position:absolute;inset:0;background:rgba(10,10,25,.55);opacity:0;pointer-events:none;transition:.3s;z-index:40}
+  .overlay.show{opacity:1;pointer-events:auto}
+  .sheet{position:absolute;left:0;right:0;bottom:0;z-index:50;max-height:86%;overflow-y:auto;background:var(--bg);border-radius:24px 24px 0 0;padding:10px 18px calc(24px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .42s cubic-bezier(.22,.8,.3,1)}
+  .sheet.show{transform:none}
+  .grab{width:46px;height:5px;border-radius:99px;background:var(--line);margin:4px auto 14px}
+  .sh-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .sh-head h3{font:800 1.05rem var(--font-d);color:var(--indigo)}
+  .sh-close{width:34px;height:34px;border-radius:50%;background:var(--card);color:var(--mut);display:grid;place-items:center;font-weight:800;box-shadow:var(--shadow)}
+  .receipt{background:var(--card);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+  .r-top{display:flex;justify-content:space-between;font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);padding-bottom:12px;border-bottom:2px dashed var(--line)}
+  .r-amount{font:800 2rem var(--font-d);text-align:center;color:var(--indigo);margin:16px 0 2px;font-variant-numeric:tabular-nums}
+  .r-concepto{text-align:center;color:var(--mut);font-size:13px;font-weight:700;margin-bottom:14px}
+  .r-lines{font-size:13px;font-weight:700}
+  .r-lines div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1.5px dotted var(--line)}
+  .r-lines span{color:var(--mut)}
+  .r-estado{text-align:center;margin-top:16px}
+  .sh-actions{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .sh-note{margin-top:16px;font-size:12.5px;color:var(--mut);font-weight:600;text-align:center;line-height:1.5}
+  .toast{position:absolute;left:50%;bottom:92px;transform:translate(-50%,20px);z-index:60;background:#232677;color:#fff;font-size:13px;font-weight:800;padding:11px 18px;border-radius:999px;box-shadow:0 16px 30px -12px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.35s cubic-bezier(.2,.8,.3,1);max-width:86%;text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .toast.err{background:#8C2B0B}
+  .toast.ok{background:#4C7F22}
+  @media (max-width:520px){.stage{padding:0}.phone{width:100%;border-radius:0;padding:0;border:none;box-shadow:none;background:none}.app{height:100dvh;min-height:100dvh;border-radius:0}.stage-cap,.sbar,.notch{display:none}}
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="phone">
+    <div class="app" id="app">
+      <main class="app-main" id="appMain">
+
+        <section class="screen active" id="screen-inicio">
+          <div class="hero">
+            <div class="dome"></div>
+            <div class="sbar"><span>9:41</span><span class="notch"></span>
+              <span class="s-ic">
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="#fff"><rect y="7" width="3" height="4" rx=".8"/><rect x="4.5" y="5" width="3" height="6" rx=".8"/><rect x="9" y="2.5" width="3" height="8.5" rx=".8"/><rect x="13.5" width="3" height="11" rx=".8"/></svg>
+                <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"><path d="M1.5 4.5a10 10 0 0 1 13 0"/><path d="M4 7a6.5 6.5 0 0 1 8 0"/><circle cx="8" cy="9.6" r="1.4" fill="#fff" stroke="none"/></svg>
+                <svg width="24" height="12" viewBox="0 0 25 12"><rect x=".7" y=".7" width="21" height="10.6" rx="2.6" fill="none" stroke="#fff" opacity=".5"/><rect x="2.2" y="2.2" width="17" height="7.6" rx="1.5" fill="#fff"/><path d="M23.5 4v4a2.2 2.2 0 0 0 0-4Z" fill="#fff" opacity=".5"/></svg>
+              </span>
+            </div>
+            <div class="logo"><img class="logo-asset logo-main" src="logo-ispi.png" alt="ISPI 4019 · San Juan Bautista"></div>
+            <h1 class="app-title">MI CUENTA ISPI</h1>
+            <p class="app-sub">Visualizá tu estado de cuenta</p>
+          </div>
+
+          <div class="card dni-card reveal" id="dniCard">
+            <div class="card-head">
+              <span class="icn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+              <div><b>Ingresá tu DNI</b><small>Para consultar tu información</small></div>
+            </div>
+            <label class="dni-input">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input id="dniInput" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="DNI del alumno (ej: 12345678)">
+            </label>
+            <button class="btn-red" id="btnConsultar" disabled>Consultar</button>
+            <p class="privacy">Tus datos están protegidos y son confidenciales</p>
+            <div class="acc-error hidden" id="dniError"><span>⚠</span><span>No encontramos un alumno con ese DNI en la base de datos. Verificá el número o consultá en administración.</span></div>
+          </div>
+
+          <div class="demo-box reveal" id="demoBox" hidden>
+            <strong>Modo demo activo.</strong> Completá <code>.env</code> con tus claves de Supabase para conectar la base real.
+            <div class="chips-row"><span>Probá con:</span>
+              <button class="chip-dni" data-dni="34567890">34.567.890</button>
+              <button class="chip-dni" data-dni="38990441">38.990.441</button>
+              <button class="chip-dni" data-dni="35214879">35.214.879</button>
+            </div>
+          </div>
+
+          <div id="resultSections" class="hidden">
+            <div class="card reveal">
+              <div class="card-head"><span class="icn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></span><b>Información del alumno</b></div>
+              <div class="info-grid">
+                <div class="info-item"><small>Nombre</small><b id="iNombre">—</b></div>
+                <div class="info-item"><small>DNI</small><b id="iDni">—</b></div>
+                <div class="info-item"><small>Carrera</small><b id="iCarrera">—</b></div>
+                <div class="info-item"><small>Estado</small><span class="pill green" id="iEstado">Regular</span></div>
+              </div>
+            </div>
+            <div class="card reveal">
+              <div class="card-head"><span class="icn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><b>Resumen de cuenta</b></div>
+              <div class="stats">
+                <div class="stat blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><small>Total cuotas</small><b id="sTotal">0</b></div>
+                <div class="stat green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg><small>Cuotas pagadas</small><b id="sPagadas">0</b></div>
+                <div class="stat red"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="7" x2="12" y2="13"/><circle cx="12" cy="16.5" r=".5" fill="currentColor"/></svg><small>Cuotas pendientes</small><b id="sPendientes">0</b></div>
+              </div>
+              <div class="estado-bar">
+                <span>Estado actual</span><span class="pill green" id="ePill">Al día</span>
+                <i class="sep"></i><span>Último pago</span>
+                <span class="eb-val"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg><b id="eUltimo">—</b></span>
+              </div>
+            </div>
+            <div class="card reveal">
+              <div class="card-head row"><b>Detalle de cuotas</b><button class="link" id="btnVerHistorial">Ver historial completo ›</button></div>
+              <div id="previewList"></div>
+            </div>
+            <div class="quick reveal">
+              <h3>Accesos rápidos</h3>
+              <div class="quick-grid">
+                <button class="qa c-indigo" data-qa="historial"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg><span>Historial de pagos</span></button>
+                <button class="qa c-green" data-qa="comprobantes"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Descargar comprobantes</span></button>
+                <button class="qa c-blue" data-qa="academica"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><circle cx="12" cy="8" r=".5" fill="currentColor"/></svg><span>Información académica</span></button>
+                <button class="qa c-red" data-qa="ayuda"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg><span>Ayuda y contacto</span></button>
+              </div>
+            </div>
+            <div class="card reveal session-card">
+              <div class="theme-row">
+                <span class="th-ic" id="thSun" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/><line x1="4.6" y1="4.6" x2="6.4" y2="6.4"/><line x1="17.6" y1="17.6" x2="19.4" y2="19.4"/><line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/><line x1="4.6" y1="19.4" x2="6.4" y2="17.6"/><line x1="17.6" y1="6.4" x2="19.4" y2="4.6"/></svg></span>
+                <span class="th-ic" id="thMoon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></span>
+                <div class="th-txt"><b id="themeLabel">Modo oscuro</b><small>Elegí la apariencia de la app</small></div>
+                <label class="switch"><input type="checkbox" id="themeSwitch" aria-label="Cambiar entre modo oscuro y claro"><span class="slider"></span></label>
+              </div>
+              <button class="btn-outline" id="btnLogout2">Cerrar sesión</button>
+            </div>
+          </div>
+          <div style="height:22px"></div>
+        </section>
+
+        <section class="screen" id="screen-estado">
+          <div class="page-head"><h2>Estado de cuenta</h2><small id="estadoSub">Ciclo lectivo 2026</small></div>
+          <div class="saldo-card"><div><small>Saldo a pagar</small><b id="esSaldo">$ 0</b></div><span class="pill" id="esPill">—</span></div>
+          <div class="chips" id="filterChips">
+            <button class="chip on" data-f="todas">Todas<span class="n" id="nT"></span></button>
+            <button class="chip" data-f="pagadas">Pagadas<span class="n" id="nP"></span></button>
+            <button class="chip" data-f="pendientes">Pendientes<span class="n" id="nPe"></span></button>
+            <button class="chip" data-f="vencidas">Vencidas<span class="n" id="nV"></span></button>
+          </div>
+          <div class="list-card" id="estadoList"></div>
+        </section>
+
+        <section class="screen" id="screen-historial">
+          <div class="page-head"><h2>Historial</h2><small>Pagos registrados y comprobantes</small></div>
+          <div class="list-card" id="histList" style="margin-top:14px"></div>
+        </section>
+
+        <section class="screen" id="screen-perfil">
+          <div class="page-head"><h2>Mi perfil</h2><small>Datos del alumno</small></div>
+          <div class="perfil-card">
+            <div class="pf-top">
+              <div class="avatar" id="pAvatar">—</div>
+              <div style="flex:1"><b id="pNombre">—</b><small id="pCarrera">—</small></div>
+              <img class="logo-asset pf-logo" src="logo-ispi.png" alt="">
+            </div>
+            <div class="pf-grid">
+              <div><small>DNI</small><b id="pDni">—</b></div>
+              <div><small>Curso</small><b id="pCurso">—</b></div>
+              <div><small>Estado académico</small><b id="pEstadoAc">—</b></div>
+              <div><small>Cuotas pagas</small><b id="pPagas">—</b></div>
+              <div style="grid-column:1/-1"><small>Email institucional</small><b id="pEmail">—</b></div>
+            </div>
+          </div>
+          <div class="list-card" style="margin-top:14px">
+            <div class="crow"><div class="c-mid"><b>Base de datos</b><small>Origen de los datos consultados</small></div><div class="c-right"><span class="st paga" id="pDb">—</span></div></div>
+            <div class="crow"><div class="c-mid"><b>Último pago</b><small id="pUltimoSub">—</small></div><div class="c-right"><span class="st paga" id="pUltimo">—</span></div></div>
+          </div>
+          <button class="btn-outline" id="btnLogout">Cerrar sesión</button>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item on" data-nav="inicio"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Inicio</button>
+        <button class="nav-item" data-nav="estado"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Estado de cuenta</button>
+        <button class="nav-item" data-nav="historial"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><polyline points="12 7 12 12 15 15"/></svg>Historial</button>
+        <button class="nav-item" data-nav="perfil"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Perfil</button>
+      </nav>
+
+      <div class="overlay" id="overlay"></div>
+      <div class="sheet" id="sheet" role="dialog" aria-modal="true">
+        <div class="grab"></div>
+        <div class="sh-head"><h3 id="shTitle">Detalle</h3><button class="sh-close" id="shClose" aria-label="Cerrar">✕</button></div>
+        <div id="sheetBody"></div>
+      </div>
+      <div class="toast" id="toast"></div>
+    </div>
+  </div>
+  <p class="stage-cap"><b>MI CUENTA ISPI</b> · Node.js + Express + Supabase</p>
+</div>
+
+<script>
+/* ═══ Utilidades ═══ */
+const $ = s => document.querySelector(s);
+const money = n => '$ ' + Number(n).toLocaleString('es-AR');
+const fmtDNI = d => d.replace(/\D/g,'').slice(0,8).replace(/(?=(?!\b)\d{3}(?=(?:\d{3})*$))/g,'.');
+const fmtCorto = iso => new Intl.DateTimeFormat('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(iso+'T00:00:00'));
+const fmtLargo = iso => new Intl.DateTimeFormat('es-AR',{day:'numeric',month:'long',year:'numeric'}).format(new Date(iso+'T00:00:00'));
+const cap = s => s.charAt(0).toUpperCase()+s.slice(1);
+const tituloDe = c => c.nro_cuota === 0
+  ? 'Matrícula ' + new Date(c.vencimiento+'T00:00:00').getFullYear()
+  : cap(new Intl.DateTimeFormat('es-AR',{month:'long',year:'numeric'}).format(new Date(c.vencimiento+'T00:00:00')));
+const LBL = { paga:'Pagada', pendiente:'Pendiente', vencida:'Vencida' };
+const state = { screen:'inicio', dni:'', alumno:null, cuotas:[], filter:'todas', demo:false };
+
+/* ═══ API de Node (muestra el error real si falla) ═══ */
+async function apiEstado(dni){
+  const res = await fetch('/api/estado-cuenta?dni=' + encodeURIComponent(dni));
+  if (res.status === 404) throw { notFound:true };
+  if (!res.ok){
+    let msg = 'Error de conexión con el servidor';
+    try { msg = (await res.json()).error || msg; } catch(e){}
+    throw new Error(msg);
+  }
+  return res.json();   // { alumno, cuotas, demo }
+}
+
+/* ═══ Tema oscuro / claro ═══ */
+function applyTheme(t, save=true){
+  $('#app').setAttribute('data-theme', t);
+  const dark = t === 'dark';
+  $('#themeSwitch').checked = dark;
+  $('#themeLabel').textContent = dark ? 'Modo oscuro' : 'Modo claro';
+  $('#thMoon').hidden = !dark; $('#thSun').hidden = dark;
+  if (save){ try { localStorage.setItem('ispi-theme', t); } catch(e){} }
+}
+$('#themeSwitch').addEventListener('change', e => applyTheme(e.target.checked ? 'dark' : 'light'));
+(function(){ let s='light'; try{ s = localStorage.getItem('ispi-theme')||'light'; }catch(e){}
+  applyTheme(s==='dark'?'dark':'light', false); })();
+
+/* ═══ Navegación ═══ */
+function showScreen(n){
+  state.screen = n;
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = $('#screen-'+n); el.classList.add('active');
+  $('#appMain').scrollTop = 0; revealIn(el);
+}
+function revealIn(c){
+  const items = c.querySelectorAll('.reveal');
+  items.forEach((el,i)=>{ el.classList.remove('in'); el.style.setProperty('--d',(i*70)+'ms'); });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>items.forEach(el=>el.classList.add('in'))));
+}
+function setNav(n){ document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('on', b.dataset.nav===n)); }
+$('#bottomNav').addEventListener('click', e => {
+  const b = e.target.closest('.nav-item'); if (!b) return;
+  const t = b.dataset.nav;
+  if (!state.alumno && t !== 'inicio'){ toast('Ingresá tu DNI para consultar 🔒','err'); return; }
+  setNav(t); showScreen(t);
+});
+
+/* ═══ Input DNI ═══ */
+const input = $('#dniInput'), btn = $('#btnConsultar');
+input.addEventListener('input', () => {
+  state.dni = input.value.replace(/\D/g,'').slice(0,8);
+  input.value = state.dni ? fmtDNI(state.dni) : '';
+  btn.disabled = state.dni.length < 7;
+  $('#dniError').classList.add('hidden');
+});
+document.querySelectorAll('.chip-dni').forEach(ch => ch.addEventListener('click', () => {
+  input.value = fmtDNI(ch.dataset.dni); input.dispatchEvent(new Event('input')); input.focus();
+}));
+
+/* ═══ Consulta ═══ */
+btn.addEventListener('click', consultar);
+input.addEventListener('keydown', e => { if (e.key === 'Enter' && !btn.disabled) consultar(); });
+async function consultar(){
+  if (state.dni.length < 7) return;
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Consultando…';
+  try {
+    const data = await apiEstado(state.dni);
+    state.alumno = data.alumno; state.cuotas = data.cuotas; state.demo = data.demo;
+    renderAll();
+    $('#dniCard').classList.add('hidden');
+    $('#demoBox').classList.add('hidden');
+    $('#resultSections').classList.remove('hidden');
+    revealIn($('#screen-inicio'));
+    $('#appMain').scrollTo({ top:0, behavior:'smooth' });
+    toast('Datos recuperados del servidor ✓','ok');
+  } catch(err){
+    if (err && err.notFound){
+      $('#dniError').classList.remove('hidden');
+      const c = $('#dniCard'); c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
+    } else { toast(err.message || 'Error de conexión con el servidor','err'); console.error(err); }
+  } finally { btn.innerHTML = 'Consultar'; btn.disabled = state.dni.length < 7; }
+}
+
+/* ═══ Cierre de sesión ═══ */
+function logout(){
+  state.alumno = null; state.cuotas = []; state.dni = ''; state.filter = 'todas';
+  input.value = ''; btn.disabled = true;
+  $('#resultSections').classList.add('hidden');
+  $('#dniCard').classList.remove('hidden');
+  if (state.demo) $('#demoBox').classList.remove('hidden');
+  $('#dniError').classList.add('hidden');
+  setNav('inicio'); showScreen('inicio');
+  toast('Sesión cerrada. ¡Hasta pronto!');
+}
+$('#btnLogout').addEventListener('click', logout);
+$('#btnLogout2').addEventListener('click', logout);
+
+/* ═══ Renders ═══ */
+function rowHTML(c){
+  const icon = c.estado === 'paga'
+    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg>'
+    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="7.5" x2="12" y2="13"/><circle cx="12" cy="16.3" r=".5" fill="currentColor"/></svg>';
+  const fecha = c.estado === 'paga' ? fmtCorto(c.fecha_pago)
+    : c.estado === 'vencida' ? 'Venció el ' + fmtCorto(c.vencimiento) : 'Vence el ' + fmtCorto(c.vencimiento);
+  return `<button class="crow" data-id="${c.id}">
+    <span class="c-ic ${c.estado}">${icon}</span>
+    <span class="c-mid"><b>${tituloDe(c)}</b><small>${c.concepto}</small></span>
+    <span class="c-right"><span class="st ${c.estado}">${LBL[c.estado]}</span><span class="dt">${fecha}</span></span>
+    <svg class="c-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>`;
+}
+function stagger(c){
+  const rows = c.querySelectorAll('.crow');
+  rows.forEach(el=>{ el.style.opacity = 0; el.style.transform = 'translateY(10px)'; });
+  requestAnimationFrame(()=>requestAnimationFrame(()=>rows.forEach((el,i)=>{
+    el.style.transition = `opacity .4s ease ${i*55}ms, transform .45s cubic-bezier(.2,.8,.3,1) ${i*55}ms`;
+    el.style.opacity = 1; el.style.transform = 'none'; })));
+}
+function resumen(){
+  const cs = state.cuotas;
+  const pagas = cs.filter(c=>c.estado==='paga'), pend = cs.filter(c=>c.estado==='pendiente'), venc = cs.filter(c=>c.estado==='vencida');
+  const saldo = [...pend,...venc].reduce((s,c)=>s+Number(c.monto),0);
+  const ultimo = pagas.slice().sort((a,b)=>b.fecha_pago.localeCompare(a.fecha_pago))[0] || null;
+  return { cs, pagas, pend, venc, saldo, ultimo };
+}
+function renderAll(){
+  const a = state.alumno, r = resumen();
+  $('#iNombre').textContent = `${a.nombre} ${a.apellido}`;
+  $('#iDni').textContent = fmtDNI(a.dni);
+  $('#iCarrera').textContent = a.carrera;
+  $('#iEstado').textContent = a.estado_academico || 'Regular';
+  $('#sTotal').textContent = r.cs.length;
+  $('#sPagadas').textContent = r.pagas.length;
+  $('#sPendientes').textContent = r.pend.length + r.venc.length;
+  const pill = $('#ePill');
+  if (r.venc.length){ pill.textContent = `${r.venc.length} vencida${r.venc.length>1?'s':''}`; pill.className = 'pill red'; }
+  else { pill.textContent = 'Al día'; pill.className = 'pill green'; }
+  $('#eUltimo').textContent = r.ultimo ? fmtCorto(r.ultimo.fecha_pago) : '—';
+  $('#previewList').innerHTML = [...r.venc, ...r.pend, ...r.pagas.slice().reverse()].slice(0,3).map(rowHTML).join('');
+  stagger($('#previewList'));
+  $('#estadoSub').textContent = `${a.nombre} ${a.apellido} · ${a.carrera}`;
+  $('#esSaldo').textContent = money(r.saldo);
+  $('#esPill').textContent = r.venc.length ? 'Con deuda' : r.pend.length ? 'Al día' : 'Sin deuda';
+  $('#nT').textContent = r.cs.length; $('#nP').textContent = r.pagas.length;
+  $('#nPe').textContent = r.pend.length; $('#nV').textContent = r.venc.length;
+  paintEstadoList();
+  const pag = r.pagas.slice().sort((x,y)=>y.fecha_pago.localeCompare(x.fecha_pago));
+  $('#histList').innerHTML = pag.length ? pag.map(rowHTML).join('')
+    : '<div class="empty-state"><span></span>Todavía no hay pagos registrados.</div>';
+  stagger($('#histList'));
+  $('#pAvatar').textContent = (a.nombre[0]+a.apellido[0]).toUpperCase();
+  $('#pNombre').textContent = `${a.nombre} ${a.apellido}`;
+  $('#pCarrera').textContent = a.carrera;
+  $('#pDni').textContent = fmtDNI(a.dni);
+  $('#pCurso').textContent = a.curso;
+  $('#pEstadoAc').textContent = a.estado_academico || 'Regular';
+  $('#pPagas').textContent = `${r.pagas.length} de ${r.cs.length}`;
+  $('#pEmail').textContent = a.email || '—';
+  $('#pDb').textContent = state.demo ? 'Demo local (Node)' : 'Supabase ✓';
+  $('#pUltimo').textContent = r.ultimo ? money(r.ultimo.monto) : '—';
+  $('#pUltimoSub').textContent = r.ultimo ? `${r.ultimo.concepto} · ${fmtLargo(r.ultimo.fecha_pago)}` : '—';
+}
+function paintEstadoList(){
+  const r = resumen();
+  const list = state.filter === 'pagadas' ? r.pagas : state.filter === 'pendientes' ? r.pend
+    : state.filter === 'vencidas' ? r.venc : r.cs.slice().sort((a,b)=>a.vencimiento.localeCompare(b.vencimiento));
+  $('#estadoList').innerHTML = list.length ? list.map(rowHTML).join('')
+    : '<div class="empty-state"><span>🗂</span>No hay cuotas en esta categoría.</div>';
+  stagger($('#estadoList'));
+}
+$('#filterChips').addEventListener('click', e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  state.filter = b.dataset.f;
+  document.querySelectorAll('#filterChips .chip').forEach(x=>x.classList.toggle('on', x===b));
+  paintEstadoList();
+});
+$('#btnVerHistorial').addEventListener('click', ()=>{ setNav('historial'); showScreen('historial'); });
+
+/* ═══ Sheets / accesos rápidos ═══ */
+$('#appMain').addEventListener('click', e => {
+  const row = e.target.closest('.crow');
+  if (row) openCuota(state.cuotas.find(c => String(c.id) === row.dataset.id));
+});
+function openCuota(c){
+  if (!c) return;
+  const pag = c.estado === 'paga';
+  $('#shTitle').textContent = pag ? 'Comprobante de pago' : 'Detalle de cuota';
+  $('#sheetBody').innerHTML = `
+    <div class="receipt">
+      <img class="logo-asset r-logo" src="logo-ispi.png" alt="">
+      <div class="r-top"><span>Administración</span><span>N° ${String(c.id).padStart(5,'0')}</span></div>
+      <div class="r-amount">${money(c.monto)}</div>
+      <div class="r-concepto">${tituloDe(c)} · ${c.concepto}</div>
+      <div class="r-lines">
+        <div><span>Titular</span><b>${state.alumno.nombre} ${state.alumno.apellido}</b></div>
+        <div><span>DNI</span><b>${fmtDNI(state.alumno.dni)}</b></div>
+        <div><span>Vencimiento</span><b>${fmtLargo(c.vencimiento)}</b></div>
+        ${pag ? `<div><span>Fecha de pago</span><b>${fmtLargo(c.fecha_pago)}</b></div>
+                 <div><span>Cód. operación</span><b>OP-2026-${String(c.id).padStart(4,'0')}</b></div>` : ''}
+      </div>
+      <div class="r-estado"><span class="pill ${c.estado==='paga'?'green':c.estado==='vencida'?'red':'orange'}">${LBL[c.estado]}</span></div>
+    </div>
+    <div class="sh-actions">
+      ${pag ? `<button class="btn-red" style="margin:0" onclick="downloadReceipt(${c.id})">⬇ Descargar comprobante</button>` : ''}
+      <button class="btn-outline" style="margin:0;width:100%" onclick="closeSheet()">Volver</button>
+    </div>
+    ${pag ? '' : '<p class="sh-note">Para abonar, acercate a administración del instituto<br>de lunes a viernes de 17 a 21 h.</p>'}`;
+  openSheetRaw();
+}
+function downloadReceipt(id){
+  const c = state.cuotas.find(x => x.id === id); if (!c) return;
+  const txt = ['ISPI 4019 — SAN JUAN BAUTISTA','COMPROBANTE DE PAGO','',
+    `Alumno: ${state.alumno.nombre} ${state.alumno.apellido} (DNI ${fmtDNI(state.alumno.dni)})`,
+    `Concepto: ${tituloDe(c)} — ${c.concepto}`, `Importe: ${money(c.monto)}`,
+    `Fecha de pago: ${fmtLargo(c.fecha_pago)}`, `Código de operación: OP-2026-${String(c.id).padStart(4,'0')}`,'',
+    'Documento generado por MI CUENTA ISPI.'].join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([txt], {type:'text/plain'}));
+  a.download = `comprobante_ISPI_${c.id}.txt`; a.click(); URL.revokeObjectURL(a.href);
+  toast('Comprobante descargado ✓','ok');
+}
+document.querySelectorAll('.qa').forEach(b => b.addEventListener('click', () => {
+  const t = b.dataset.qa;
+  if (t === 'historial'){ setNav('historial'); showScreen('historial'); return; }
+  if (t === 'comprobantes'){
+    const pag = resumen().pagas.slice().sort((x,y)=>y.fecha_pago.localeCompare(x.fecha_pago));
+    $('#shTitle').textContent = 'Descargar comprobantes';
+    $('#sheetBody').innerHTML = pag.length ? pag.map(c =>
+      `<button class="crow" style="border-top:1.5px solid var(--line-soft)" onclick="downloadReceipt(${c.id})">
+        <span class="c-ic paga"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>
+        <span class="c-mid"><b>${tituloDe(c)}</b><small>${fmtLargo(c.fecha_pago)}</small></span>
+        <span class="c-right"><span class="st paga">${money(c.monto)}</span></span></button>`).join('')
+      : '<div class="empty-state"><span>🧾</span>Aún no hay pagos para descargar.</div>';
+    openSheetRaw(); return;
+  }
+  if (t === 'academica'){
+    $('#shTitle').textContent = 'Información académica';
+    $('#sheetBody').innerHTML = `<div class="receipt"><div class="r-lines">
+      <div><span>Carrera</span><b style="text-align:right">${state.alumno.carrera}</b></div>
+      <div><span>Curso</span><b>${state.alumno.curso}</b></div>
+      <div><span>Modalidad</span><b>Presencial</b></div>
+      <div><span>Plan</span><b>Res. Min. N° 4019/19</b></div>
+      <div><span>Sede</span><b>San Juan Bautista</b></div></div></div>
+      <div class="sh-actions"><button class="btn-outline" style="margin:0;width:100%" onclick="closeSheet()">Volver</button></div>`;
+    openSheetRaw(); return;
+  }
+  $('#shTitle').textContent = 'Ayuda y contacto';
+  $('#sheetBody').innerHTML = `<div class="receipt"><div class="r-lines">
+    <div><span>Administración</span><b>admin@ispi4019.edu.ar</b></div>
+    <div><span>Teléfono</span><b>+54 9 3876 40-4019</b></div>
+    <div><span>Horario</span><b>Lun a Vie · 17 a 21 h</b></div>
+    <div><span>Dirección</span><b>San Juan Bautista, Salta</b></div></div></div>
+    <p class="sh-note">Ante diferencias en tu estado de cuenta, contactá a administración con tu DNI y N° de comprobante.</p>
+    <div class="sh-actions"><button class="btn-outline" style="margin:0;width:100%" onclick="closeSheet()">Volver</button></div>`;
+  openSheetRaw();
+}));
+function openSheetRaw(){ $('#overlay').classList.add('show'); $('#sheet').classList.add('show'); }
+function closeSheet(){ $('#overlay').classList.remove('show'); $('#sheet').classList.remove('show'); }
+$('#shClose').addEventListener('click', closeSheet);
+$('#overlay').addEventListener('click', closeSheet);
+
+let toastT;
+function toast(msg, type=''){
+  const t = $('#toast'); t.textContent = msg; t.className = 'toast show ' + type;
+  clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove('show'), 2600);
+}
+
+/* ═══ Inicio: preguntar al servidor si hay demo ═══ */
+fetch('/api/health').then(r=>r.json()).then(h => {
+  state.demo = h.demo; $('#demoBox').hidden = !h.demo;
+}).catch(()=>{ $('#demoBox').hidden = false; });
+revealIn($('#screen-inicio'));
+</script>
+</body>
+</html>

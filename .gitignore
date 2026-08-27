@@ -1,0 +1,19 @@
+# Variables de entorno (NUNCA subir claves a GitHub)
+.env
+.env.local
+.env.production
+
+# Dependencias
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
