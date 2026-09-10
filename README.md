@@ -258,12 +258,3 @@ anon public key → para SUPABASE_ANON_KEY
 Rodrigo - Trabajo Práctico - Bases de Datos
 
 ISPI 4019 - San Juan Bautista
-
-📄 Licencia
-Este proyecto fue desarrollado con fines educativos como parte del trabajo práctico de la materia Bases de Datos.
-
-🙏 Agradecimientos
-Supabase - Plataforma de base de datos PostgreSQL en la nube
-Express.js - Framework web para Node.js
-Vercel - Plataforma de deploy
-Google Fonts - Tipografías Baloo 2 y Nunito
