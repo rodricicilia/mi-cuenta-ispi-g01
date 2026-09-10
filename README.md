@@ -4,21 +4,6 @@ Sistema web mobile-first para la consulta del estado de cuenta de alumnos del **
 
 ---
 
-## 📋 Tabla de contenidos
-
-- [Descripción](#descripción)
-- [Tecnologías](#tecnologías)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Base de datos](#base-de-datos)
-- [Backend - API REST](#backend---api-rest)
-- [Frontend](#frontend)
-- [Instalación y ejecución local](#instalación-y-ejecución-local)
-- [Deploy en Vercel](#deploy-en-vercel)
-- [Variables de entorno](#variables-de-entorno)
-- [Autor](#autor)
-
----
-
 ## 📝 Descripción
 
 **MI CUENTA ISPI** es una aplicación web desarrollada como trabajo práctico para la materia de Bases de Datos. Su objetivo es demostrar la integración entre un frontend mobile, un backend en Node.js y una base de datos relacional en la nube (Supabase/PostgreSQL).
