@@ -120,7 +120,9 @@ INSERT INTO cuotas (alumno_id, concepto, vencimiento, importe, pagado) VALUES
 (1, 'Pago de matrícula', '2026-03-05', 60000, true),
 (1, 'Cuota mensual', '2026-04-10', 45000, true),
 (1, 'Cuota mensual', '2026-05-10', 45000, false);
+
 🔌 Backend - API REST
+
 El backend está construido con Node.js + Express y se comunica con Supabase mediante la API REST de PostgREST (sin SDK, con fetch directo).
 Endpoints disponibles
 GET /api/health
@@ -163,7 +165,9 @@ vencida: si pagado = false y vencimiento < hoy
 pendiente: si pagado = false y vencimiento >= hoy
 Modo demo
 Si no se configuran las variables de entorno de Supabase, el servidor funciona en modo demo con datos de prueba predefinidos (3 alumnos con sus cuotas).
+
 🎨 Frontend
+
 Características
 Diseño mobile-first: optimizado para pantallas de 375px a 412px
 Paleta institucional (extraída del logo del ISPI 4019):
@@ -185,7 +189,9 @@ Al consultar, el login se oculta y se muestra la información
 Puede navegar entre secciones con la barra inferior
 Al tocar una cuota se abre un comprobante descargable
 Al final de la página puede cambiar el tema (oscuro/claro) y cerrar sesión
+
 ⚙️ Instalación y ejecución local
+
 Requisitos previos
 Node.js (versión 18 o superior)
 Git
@@ -204,7 +210,9 @@ npm install
 # 4. Iniciar el servidor
 npm start
 La aplicación estará disponible en: http://localhost:3000
+
 🌐 Deploy en Vercel
+
 El proyecto está desplegado en Vercel y disponible públicamente en:
 https://mi-cuenta-ispi-g01-lsxhvgjxh-rodrigopwaispi.vercel.app
 Configuración en Vercel
@@ -220,6 +228,7 @@ El archivo vercel.json define cómo Vercel debe construir y servir la aplicació
     { "src": "/(.*)", "dest": "public/$1" }
   ]
 }
+
 Deploy automático
 Cada vez que se hace git push a la rama main, Vercel redeploya automáticamente el proyecto.
 🔑 Variables de entorno
@@ -236,18 +245,23 @@ https://xxxx.supabase.co
 SUPABASE_ANON_KEY
 Clave pública de Supabase (anon)
 eyJhbGciOi...
+
 ⚠️ Importante: el archivo .env contiene credenciales sensibles y NO debe subirse a GitHub. Ya está incluido en .gitignore.
 Cómo obtener las credenciales de Supabase
 Entrar al dashboard de Supabase y seleccionar el proyecto
+
 Ir a Project Settings (⚙️) → API
 Copiar:
 Project URL → para SUPABASE_URL
 anon public key → para SUPABASE_ANON_KEY
 👤 Autor
 Rodrigo - Trabajo Práctico - Bases de Datos
+
 ISPI 4019 - San Juan Bautista
+
 📄 Licencia
 Este proyecto fue desarrollado con fines educativos como parte del trabajo práctico de la materia Bases de Datos.
+
 🙏 Agradecimientos
 Supabase - Plataforma de base de datos PostgreSQL en la nube
 Express.js - Framework web para Node.js
