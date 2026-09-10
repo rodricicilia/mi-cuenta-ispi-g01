@@ -127,6 +127,12 @@ app.get('/api/estado-cuenta', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(
-  `✔ MI CUENTA ISPI → http://localhost:${PORT} ` +
-  (DEMO ? '· MODO DEMO' : `· Supabase (${new URL(SB_URL).hostname})`)));
+// Para Vercel (serverless)
+module.exports = app;
+
+// Para desarrollo local
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => console.log(
+    `✔ MI CUENTA ISPI → http://localhost:${PORT} ` +
+    (DEMO ? '· MODO DEMO' : `· Supabase (${new URL(SB_URL).hostname})`)));
+  }
